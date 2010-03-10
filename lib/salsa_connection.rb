@@ -8,7 +8,7 @@ class SalsaConnection
   class AuthenticationFailure < StandardError; end
   class PostError < StandardError; end
   
-  attr_accessor :raw_post_response
+  attr_accessor :raw_post_response, :raw_post_request
 
   def initialize(opts)
     @email = opts[:email]
@@ -18,7 +18,8 @@ class SalsaConnection
     @debug_http = opts[:debug_http]
   end
   def _post(object, assertive=false)
-    post_response = @conn.post('/save', uri_encode([[:xml, "xml"]].push(object)), {"Cookie" => @session_cookie})
+    self.raw_post_request = uri_encode([[:xml, "xml"]].push(object))
+    post_response = @conn.post('/save', self.raw_post_request, {"Cookie" => @session_cookie})
     code = post_response.code
     self.raw_post_response = post_response.read_body
     if code != "200"

@@ -106,6 +106,9 @@ class WiredForChangeTest < Test::Unit::TestCase
           should 'leave raw_post_response' do
             @connection.raw_post_response.should == @response_xml
           end
+          should 'leave raw_post_request' do
+            @connection.raw_post_request.should == 'xml=xml&object=supporter&Email=foo%40example.com'
+          end
         end
       end
       context 'bad creds' do
