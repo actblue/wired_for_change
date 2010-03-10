@@ -6,6 +6,7 @@ class SalsaConnection
   include UriEncoder
   class AuthenticationError < StandardError; end
   class AuthenticationFailure < StandardError; end
+  class PostError < StandardError; end
   
   attr_accessor :raw_post_response
 
@@ -16,13 +17,22 @@ class SalsaConnection
     @use_ssl = opts[:use_ssl]
     @debug_http = opts[:debug_http]
   end
+  def _post(object, assertive=false)
+    post_response = @conn.post('/save', uri_encode([[:xml, "xml"]].push(object)), {"Cookie" => @session_cookie})
+    code = post_response.code
+    self.raw_post_response = post_response.read_body
+    if code != "200"
+      return unless assertive
+      raise PostError, "Unexpected response code #{post_response.code} to post"
+    end
+  end
   def post(object)
     connect unless @connected
-    self.raw_post_response = @conn.post('/save', uri_encode([[:xml, "xml"]].push(object)), {"Cookie" => @session_cookie})
+    _post(object, false)
   end
   def post!(object)
     connect! unless @connected
-    self.raw_post_response = @conn.post('/save', uri_encode([[:xml, "xml"]].push(object)), {"Cookie" => @session_cookie})
+    _post(object, true)
   end
   def connected?
     @connected == true
@@ -42,7 +52,7 @@ class SalsaConnection
     code = @auth_resp.code
     if code != "200"
       return unless assertive
-      raise AuthenticationError, "Unexpected response code #{@auth_resp.code}"
+      raise AuthenticationError, "Unexpected response code #{@auth_resp.code} to auth"
     end
 
     # Too bad they don't return a distinctive HTTP status (404 maybe?) to indicate login failure

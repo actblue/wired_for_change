@@ -94,9 +94,12 @@ class WiredForChangeTest < Test::Unit::TestCase
                 <success object="donation" key="11713849">Modified entry 11713849</success>
               </data>
             EOXML
+            @http_response = mock()
+            @http_response.stubs(:code).returns("200")
+            @http_response.stubs(:read_body).returns(@response_xml)
             @http_connection.stubs(:post).with('/save', 
                                                "xml=xml&object=supporter&Email=foo%40example.com",
-                                               {'Cookie' => SESSION_KEY}).returns(@response_xml)
+                                               {'Cookie' => SESSION_KEY}).returns(@http_response)
             assert_nothing_raised { @connection.post!(supporter) }
           end
           should 'be connected' do @connection.should.be.connected end
