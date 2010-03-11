@@ -3,5 +3,5 @@ class SalsaSupporter < SalsaObject
   salsa_attribute :Street, :Street_2
   salsa_attribute :City, :State, :Country, :Zip
   salsa_attribute :Organization, :Occupation
-  salsa_attribute :Tag
+  salsa_attribute :tag
 end
