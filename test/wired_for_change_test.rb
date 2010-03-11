@@ -14,10 +14,10 @@ begin; require 'turn'; rescue LoadError; end # Use Test::Unit Report formatting 
 class WiredForChangeTest < Test::Unit::TestCase
   context 'supporter' do
     setup do
-      @supporter = SalsaSupporter.new(:Tag => ['foo', 'bar bas'], :Email => "foo@bar.com")
+      @supporter = SalsaSupporter.new(:tag => ['foo', 'bar bas'], :Email => "foo@bar.com")
     end
     should 'encode tags' do
-      @supporter.uri_encoded.should == "object=supporter&Email=foo%40bar.com&Tag=foo&Tag=bar%20bas"
+      @supporter.uri_encoded.should == "object=supporter&Email=foo%40bar.com&tag=foo&tag=bar%20bas"
     end
   end
   context 'donation' do
@@ -31,12 +31,12 @@ class WiredForChangeTest < Test::Unit::TestCase
   end
   context 'combo encoding' do
     setup do
-      @supporter = SalsaSupporter.new(:Tag => ['foo', 'bar bas'], :Email => "foo@bar.com")
+      @supporter = SalsaSupporter.new(:tag => ['foo', 'bar bas'], :Email => "foo@bar.com")
       @donation = SalsaDonation.new(:Email => "foo@bar.com", :amount => 12.34)
     end
     should 'work' do
       encoded = SalsaConnection.new({}).uri_encode([[:xml, "xml"], @supporter, @donation])
-      encoded.should == "xml=xml&object=supporter&Email=foo%40bar.com&Tag=foo&Tag=bar%20bas&object=donation&Email=foo%40bar.com&amount=12.34"
+      encoded.should == "xml=xml&object=supporter&Email=foo%40bar.com&tag=foo&tag=bar%20bas&object=donation&Email=foo%40bar.com&amount=12.34"
     end
   end
   context 'connection' do
