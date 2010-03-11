@@ -7,6 +7,7 @@ require File.dirname(__FILE__) + '/../init.rb'
 require 'shoulda'
 require 'mocha'
 require 'ruby-debug' # uncomment this to use the debugger
+require 'time'
 begin; require 'turn'; rescue LoadError; end # Use Test::Unit Report formatting (New) if the gem is installed
 #END_TEST_HELPER content
 
@@ -21,10 +22,11 @@ class WiredForChangeTest < Test::Unit::TestCase
   end
   context 'donation' do
     setup do
-      @donation = SalsaDonation.new(:Email => "foo@bar.com", :amount => 12.34)
+      @donation = SalsaDonation.new(:Transaction_Date => Time.parse('2010-01-01 10:01:11'),
+                                    :Email => "foo@bar.com", :amount => 12.34)
     end
     should 'encode' do
-      @donation.uri_encoded.should == "object=donation&Email=foo%40bar.com&amount=12.34"
+      @donation.uri_encoded.should == "object=donation&Email=foo%40bar.com&amount=12.34&Transaction_Date=2010-01-01T10%3A01%3A11-05%3A00"
     end
   end
   context 'combo encoding' do

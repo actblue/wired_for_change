@@ -44,6 +44,8 @@ class SalsaObject
       value = self.send(attr_name)
       if value.is_a?(Array)
         value.map{ |v| uri_encode([attr_name, v.to_s])}.join("&")
+      elsif value.is_a?(Time)
+        uri_encode([attr_name, value.xmlschema])
       elsif value.nil?
         nil
       else
