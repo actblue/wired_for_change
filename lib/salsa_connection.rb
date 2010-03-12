@@ -7,6 +7,7 @@ class SalsaConnection
   class AuthenticationError < StandardError; end
   class AuthenticationFailure < StandardError; end
   class PostError < StandardError; end
+  class PostFailure < StandardError; end
   
   attr_accessor :raw_post_response, :raw_post_request
 
@@ -26,6 +27,12 @@ class SalsaConnection
       return unless assertive
       raise PostError, "Unexpected response code #{post_response.code} to post"
     end
+    if assertive && ! post_succeeded?
+      raise PostFailure, "No success entity in response to post"
+    end
+  end
+  def post_succeeded?
+    REXML::XPath.first(REXML::Document.new(self.raw_post_response), "//success") != nil
   end
   def post(object)
     connect unless @connected
