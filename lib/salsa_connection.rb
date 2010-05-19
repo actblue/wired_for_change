@@ -63,6 +63,8 @@ class SalsaConnection
       raise AuthenticationError, "Unexpected response code #{@auth_resp.code} to auth"
     end
 
+    raise AuthenticationError, "No session cookie in response" unless @session_cookie.present?
+
     # Too bad they don't return a distinctive HTTP status (404 maybe?) to indicate login failure
     if err = REXML::XPath.first(REXML::Document.new(@auth_resp.read_body), "//error")
       return unless assertive
