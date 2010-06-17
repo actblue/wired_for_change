@@ -20,7 +20,11 @@ class SalsaConnection
   end
   def _post(object, assertive=false)
     self.raw_post_request = uri_encode([[:xml, "xml"]].push(object))
-    post_response = @conn.post('/save', self.raw_post_request, {"Cookie" => @session_cookie})
+    if @session_cookie.present?
+      post_response = @conn.post('/save', self.raw_post_request, {"Cookie" => @session_cookie})
+    else
+      post_response = @conn.post('/save', self.raw_post_request)
+    end
     code = post_response.code
     self.raw_post_response = post_response.read_body
     if code != "200"
@@ -51,24 +55,27 @@ class SalsaConnection
 
     @conn.use_ssl = true if @use_ssl
     @conn.set_debug_output $stderr if @debug_http
-    @auth_resp = @conn.post('/api/authenticate.sjs', uri_encode(:email => @email, :password => @password))
 
-    #! This is so wrong! Cheap hack to dodge using something like mechanize -- whk 20100302
-    # They return multiple cookies, with complex formatting that seems to get eaten by Net::HTTP
-    @session_cookie = @auth_resp["Set-Cookie"] && @auth_resp["Set-Cookie"].split(";").find{|h| h =~ /session/i}
+    if @email.present?
+      @auth_resp = @conn.post('/api/authenticate.sjs', uri_encode(:email => @email, :password => @password))
 
-    code = @auth_resp.code
-    if code != "200"
-      return unless assertive
-      raise AuthenticationError, "Unexpected response code #{@auth_resp.code} to auth"
-    end
+      #! This is so wrong! Cheap hack to dodge using something like mechanize -- whk 20100302
+      # They return multiple cookies, with complex formatting that seems to get eaten by Net::HTTP
+      @session_cookie = @auth_resp["Set-Cookie"] && @auth_resp["Set-Cookie"].split(";").find{|h| h =~ /session/i}
 
-    raise AuthenticationError, "No session cookie in response" unless @session_cookie.present?
+      code = @auth_resp.code
+      if code != "200"
+        return unless assertive
+        raise AuthenticationError, "Unexpected response code #{@auth_resp.code} to auth"
+      end
 
-    # Too bad they don't return a distinctive HTTP status (404 maybe?) to indicate login failure
-    if err = REXML::XPath.first(REXML::Document.new(@auth_resp.read_body), "//error")
-      return unless assertive
-      raise AuthenticationFailure, "Authentication error #{err.get_text}"
+      raise AuthenticationError, "No session cookie in response" unless @session_cookie.present?
+
+      # Too bad they don't return a distinctive HTTP status (404 maybe?) to indicate login failure
+      if err = REXML::XPath.first(REXML::Document.new(@auth_resp.read_body), "//error")
+        return unless assertive
+        raise AuthenticationFailure, "Authentication error #{err.get_text}"
+      end
     end
 
     @connected = true
