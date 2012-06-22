@@ -35,8 +35,10 @@ class SalsaObject
   def self.salsa_attribute(*attr_names)
     self.salsa_attributes ||= []
     attr_names.each do |attr_name|
-      self.salsa_attributes << attr_name
-      attr_accessor attr_name
+      unless salsa_attributes.include?(attr_name)
+        self.salsa_attributes << attr_name
+        attr_accessor attr_name
+      end
     end
   end
   def attributes_encoded
