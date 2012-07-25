@@ -4,9 +4,9 @@ Track donors using Salsa Labs API
 
 == Rails >= 3.0
 
-Add the gem to your +Gemfile+, specifying groups (probably not production) to include it in.
+Add the gem to your +Gemfile+
 
-  gem "wired_for_change", :group => :development
+  gem "wired_for_change"
 
 Don't forget to <tt>bundle install</tt> to install
 
