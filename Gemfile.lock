@@ -1,0 +1,22 @@
+PATH
+  remote: .
+  specs:
+    wired_for_change (0.0.2)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    minitest (5.8.4)
+    rake (10.5.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (~> 1.10)
+  minitest
+  rake (~> 10.0)
+  wired_for_change!
+
+BUNDLED WITH
+   1.10.6
