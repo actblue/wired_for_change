@@ -8,4 +8,9 @@ class WiredForChangeTest < Minitest::Test
   def test_it_does_something_useful
     assert true
   end
+
+  def test_init_a_supporter
+    supporter = SalsaSupporter.new(tag: ['foo', 'bar bas'], Email: "foo@bar.com")
+    refute_nil supporter
+  end
 end
