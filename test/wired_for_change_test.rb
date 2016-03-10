@@ -1,3 +1,4 @@
+# TODO: rewrite these tests using latest minitest
 # Maybe someday this'll warrant a test_helper.rb
 # require File.join(File.dirname(__FILE__), 'test_helper')
 # in the mean time:<-END_TEST_HELPER

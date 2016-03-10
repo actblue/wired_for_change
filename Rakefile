@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "wired_for_change"
   gem.homepage = "http://github.com/actblue/wired_for_change"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = "Track donors through Salsa Labs"
+  gem.description = "Track donors through Salsa Labs using this Gem"
   gem.email = "contact@actblue.com"
   gem.authors = ["Bill Kirtley", "Akshat Pradhan"]
   # dependencies defined in Gemfile
@@ -28,16 +28,8 @@ Jeweler::RubygemsDotOrgTasks.new
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
+  test.pattern = 'test/**_test.rb'
   test.verbose = true
-end
-
-require 'rcov/rcovtask'
-Rcov::RcovTask.new do |test|
-  test.libs << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-  test.rcov_opts << '--exclude "gems/*"'
 end
 
 task :default => :test
