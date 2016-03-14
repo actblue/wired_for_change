@@ -1,6 +1,7 @@
 require 'net/http'
 require 'rexml/xpath'
 require 'rexml/document'
+require 'wired_for_change'
 
 class SalsaConnection
   include UriEncoder
@@ -20,7 +21,7 @@ class SalsaConnection
   end
   def _post(object, assertive=false)
     self.raw_post_request = uri_encode([[:xml, "xml"]].push(object))
-    if @session_cookie.present?
+    if @session_cookie && @session_cookie != ''
       post_response = @conn.post('/save', self.raw_post_request, {"Cookie" => @session_cookie})
     else
       post_response = @conn.post('/save', self.raw_post_request)
@@ -56,7 +57,7 @@ class SalsaConnection
     @conn.use_ssl = true if @use_ssl
     @conn.set_debug_output $stderr if @debug_http
 
-    if @email.present?
+    if @email && @email != ''
       @auth_resp = @conn.post('/api/authenticate.sjs', uri_encode(:email => @email, :password => @password))
 
       #! This is so wrong! Cheap hack to dodge using something like mechanize -- whk 20100302
@@ -69,7 +70,7 @@ class SalsaConnection
         raise AuthenticationError, "Unexpected response code #{@auth_resp.code} to auth"
       end
 
-      raise AuthenticationError, "No session cookie in response" unless @session_cookie.present?
+      raise AuthenticationError, "No session cookie in response" unless @session_cookie && @session_cookie != ''
 
       # Too bad they don't return a distinctive HTTP status (404 maybe?) to indicate login failure
       if err = REXML::XPath.first(REXML::Document.new(@auth_resp.read_body), "//error")
