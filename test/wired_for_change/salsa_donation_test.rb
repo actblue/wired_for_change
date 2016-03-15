@@ -16,7 +16,7 @@ describe SalsaDonation do
     SalsaDonation.salsa_attributes.sort.must_equal(
       [:Donation_Tracking_Code, :Email, :Employer, :Employer_City, :Employer_State, :Employer_Street,
        :Employer_Street_2, :Employer_Zip, :First_Name, :Form_Of_Payment, :Last_Name, :Occupation,
-       :Order_Info, :Status, :Tracking_Code, :Transaction_Date, :Transaction_Type, :amount, :tag]
+       :Order_Info, :RESULT, :Status, :Tracking_Code, :Transaction_Date, :Transaction_Type, :amount, :tag]
     )
   end
 end
