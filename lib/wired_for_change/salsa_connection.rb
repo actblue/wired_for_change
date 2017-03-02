@@ -29,12 +29,13 @@ class SalsaConnection
     code = post_response.code
     self.raw_post_response = post_response.read_body
     if code != "200"
-      return unless assertive
+      return post_response unless assertive
       raise PostError, "Unexpected response code #{post_response.code} to post"
     end
     if assertive && ! post_succeeded?
       raise PostFailure, "No success entity in response to post"
     end
+    post_response
   end
   def post_succeeded?
     REXML::XPath.first(REXML::Document.new(self.raw_post_response), "//success") != nil
