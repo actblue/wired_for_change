@@ -2,7 +2,6 @@ require 'net/http'
 
 module UriEncoder
   def escape(v)
-    # URI.escape(v.to_s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
     p = URI::Parser.new
     p.escape(v.to_s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
   end
