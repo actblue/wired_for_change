@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'net/http'
 require 'rexml/xpath'
 require 'rexml/document'
-require 'wired_for_change'
 
 class SalsaConnection
   include UriEncoder

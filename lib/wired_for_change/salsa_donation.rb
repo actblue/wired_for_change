@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SalsaDonation < SalsaObject
   salsa_attribute :Email, :First_Name, :Last_Name, :Occupation
   salsa_attribute :amount, :Transaction_Date, :Transaction_Type, :Form_Of_Payment
