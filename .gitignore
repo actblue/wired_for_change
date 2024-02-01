@@ -2,3 +2,6 @@ Gemfile.lock
 .ruby-version
 .DS_Store
 *.gem
+node_modules/**/*
+package.json
+package-lock.json
