@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 require 'wired_for_change/salsa_connection'
 
 describe SalsaConnection do
   it 'should initialize a connection' do
-    SalsaConnection.new({}).wont_be_nil
+    _(SalsaConnection.new({})).wont_be_nil
   end
 
   describe 'new' do
@@ -17,7 +19,7 @@ describe SalsaConnection do
       @connection = SalsaConnection.new(args)
     end
     it 'should produce a SalsaConnection object' do
-      @connection.must_be_instance_of SalsaConnection
+      _(@connection).must_be_instance_of SalsaConnection
     end
 
     describe 'mocking connection' do
@@ -46,10 +48,10 @@ describe SalsaConnection do
         describe 'assertive' do
           before { @connection.connect! }
           it 'should set auth_resp' do
-            @connection.instance_variable_get(:@auth_resp).wont_be_nil
+            _(@connection.instance_variable_get(:@auth_resp)).wont_be_nil
           end
           it 'should set session_cookie' do
-            @connection.instance_variable_get(:@session_cookie).must_equal SESSION_KEY
+            assert_equal @connection.instance_variable_get(:@session_cookie), SESSION_KEY
           end
         end
         describe 'post a supporter assertive' do
@@ -71,13 +73,13 @@ describe SalsaConnection do
             @connection.post!(supporter)
           end
           it 'should be connected' do
-            @connection.connected?.must_equal true
+            assert_equal @connection.connected?, true
           end
           it 'should leave raw_post_response' do
-            @connection.raw_post_response.must_equal @response_xml
+            assert_equal @connection.raw_post_response, @response_xml
           end
           it 'should leave raw_post_request' do
-            @connection.raw_post_request.must_equal 'xml=xml&object=supporter&Email=foo%40example.com'
+            assert_equal @connection.raw_post_request, 'xml=xml&object=supporter&Email=foo%40example.com'
           end
         end
       end
@@ -94,10 +96,10 @@ describe SalsaConnection do
         end
         describe 'connect assertive' do
           before do
-            lambda { @connection.connect! }.must_raise SalsaConnection::AuthenticationFailure
+            _{ @connection.connect! }.must_raise SalsaConnection::AuthenticationFailure
           end
           it 'should not be connected' do
-            @connection.connected?.must_equal false
+            assert_equal @connection.connected?, false
           end
         end
         describe 'connect passive' do
@@ -105,16 +107,16 @@ describe SalsaConnection do
             @connection.connect
           end
           it 'should not be connected' do
-            @connection.connected?.must_equal false
+            assert_equal @connection.connected?, false
           end
         end
         describe 'post a supporter assertive' do
           before do
             supporter = SalsaSupporter.new(:Email => 'foo@example.com')
-            lambda { @connection.post!(supporter) }.must_raise SalsaConnection::AuthenticationFailure
+            _{ @connection.post!(supporter) }.must_raise SalsaConnection::AuthenticationFailure
           end
           it 'should not be connected' do
-            @connection.connected?.must_equal false
+            assert_equal @connection.connected?, false
           end
         end
       end

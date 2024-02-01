@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 require 'wired_for_change/salsa_supporter'
 
@@ -11,7 +13,7 @@ describe SalsaSupporter do
   end
 
   it 'should have salsa supporter attributes' do
-    SalsaSupporter.salsa_attributes.sort.must_equal(
+    _(SalsaSupporter.salsa_attributes.sort).must_equal(
         [:City, :Country, :Email, :First_Name, :Last_Name, :Occupation, :Organization, :Phone, :State,
          :Street, :Street_2, :Zip, :organization_KEY, :tag]
     )
