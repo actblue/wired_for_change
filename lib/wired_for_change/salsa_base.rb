@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'net/http'
 
 module UriEncoder
@@ -5,6 +7,7 @@ module UriEncoder
     p = URI::Parser.new
     p.escape(v.to_s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
   end
+
 
   def uri_encode(params)
     if params.is_a?(Hash)
