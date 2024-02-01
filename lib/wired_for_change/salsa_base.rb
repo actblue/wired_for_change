@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'net/http'
+require "net/http"
 
 module UriEncoder
   def escape(v)
